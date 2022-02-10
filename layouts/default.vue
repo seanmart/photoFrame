@@ -1,5 +1,5 @@
 <template lang="html">
-<main class="relative h-screen">
+<main class="relative h-full">
   <div class="absolute top-gutter left-gutter right-gutter flex justify-center sm:right-auto">
     <logo class="fill-purple h-logo "/>
   </div>
@@ -23,9 +23,15 @@ export default {
 <style lang="css">
 @import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
 html{
-  height: 100vh;
+  height: 100%;
   overflow: hidden;
   background: rgba(theme('colors.purplergb'),.1);
+  font-weight:400;
+}
+body,
+#__nuxt,
+#__layout{
+  height: 100%;
 }
 
 .button{

@@ -4,7 +4,7 @@
       <upload class="w-16 fill-purple mb-5" />
 
       <div class="dz__drag-msg text-center">
-        <h3 class="font-bold text-xl mb-5">Drag an image here</h3>
+        <h3 class="text-xl mb-5">Drag an image here</h3>
         <p class="dz__message mb-2">Or if you prefer</p>
       </div>
 
@@ -51,6 +51,6 @@ export default {
 }
 
 .is-mobile .dz__drag-msg {
-  display: hidden;
+  display: none;
 }
 </style>
