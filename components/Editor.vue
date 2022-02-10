@@ -8,9 +8,18 @@
     </div>
 
     <div class="absolute bottom-gutter left-gutter right-gutter flex flex-row justify-center items-center text-dark">
-      <span class="text-2xl mr-4">–</span>
-      <vue-slider :value="1" @change="handleChange" :min="1" :max="2" :interval="0.01" :width="200" :tooltip-formatter="toolTipFormatter" />
-      <span class="text-2xl ml-4">+</span>
+      <span class="text-4xl mr-6">–</span>
+      <vue-slider
+        @change="handleChange"
+        :value="1"
+        :min="1"
+        :max="2"
+        :interval="0.01"
+        :width="200"
+        :dotSize="30"
+        :tooltip-formatter="toolTipFormatter"
+      />
+      <span class="text-4xl ml-6">+</span>
     </div>
   </section>
 </template>
