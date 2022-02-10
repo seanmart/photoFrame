@@ -25,7 +25,7 @@ export default {
 html{
   height: 100%;
   overflow: hidden;
-  background: rgba(theme('colors.purplergb'),.1);
+  background: theme('colors.light');
   font-weight:400;
 }
 body,
@@ -35,15 +35,24 @@ body,
 }
 
 .button{
-  padding: .75rem 2rem;
+  padding: .75rem 1.6rem;
   color: white;
   border-radius: .25rem;
   background: theme('colors.purple');
   cursor: pointer;
   transition: transform .25s;
 }
-.button:hover{
+.button--tight{
+  padding: .75rem;
+}
+.is-desktop .button:hover{
   background: theme('colors.dark')
+}
+.button.button--dark{
+  background: theme('colors.dark')
+}
+.is-desktop .button:hover{
+  background: theme('colors.darker')
 }
 .button.button--grey{
   opacity: .6

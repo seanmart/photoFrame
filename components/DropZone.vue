@@ -8,9 +8,9 @@
         <p class="dz__message mb-2">Or if you prefer</p>
       </div>
 
-      <label for="file" class="button">
+      <label for="file" class="button button--dark">
         <span>Select from your device</span>
-        <input type="file" @change="selectedFile" name="file" id="file" class="hidden" />
+        <input type="file" @change="selectedFile" name="file" id="file" class="hidden" accept="image/*" />
       </label>
     </div>
   </section>

@@ -1,13 +1,25 @@
 <template lang="html">
   <section id="editor" class="absolute inset-0 flex justify-center items-center pt-header sm:pt-0" ref="container">
-    <canvas id="canvas" ref="canvas" :class="{ 'is-visible': isVisible }" />
 
-    <div class="absolute right-gutter left-gutter top-header-space sm:left-auto sm:top-gutter flex flex-row items-center justify-center">
-      <a class="button button--grey mr-2" v-html="'Remove'" @click="$emit('remove')" />
-      <a class="button" v-html="'Download'" @click="download" />
+    <div :class="{ 'is-visible': showCanvas,'hidden':showImg }">
+      <canvas id="canvas" ref="canvas" />
     </div>
 
-    <div class="absolute bottom-gutter left-gutter right-gutter flex flex-row justify-center items-center text-dark">
+    <div class="absolute right-gutter left-gutter top-header-space sm:left-auto sm:top-gutter flex flex-row items-center justify-center">
+
+      <template v-if="!showImg">
+        <button class="button button--grey button--tight mr-2" @click="$emit('remove')"><back class="fill-white h-6"/></button>
+        <button v-if="isMobile()" class="button button--dark" v-html="'Create Photo'" @click="createImg" />
+        <button v-else class="button button--dark" v-html="'Download'" @click="download" />
+      </template>
+
+      <template v-if="showImg">
+        <button class="button button--grey button--tight mr-2" @click="destroyPhoto"><back class="fill-white h-6"/></button>
+        <button v-if="isMobile()" class="button button--dark" v-html="'Download'" @click="download" />
+      </template>
+    </div>
+
+    <div class="absolute bottom-gutter left-gutter right-gutter flex flex-row justify-center items-center text-dark" :class="{'hidden':showImg}">
       <span class="text-4xl mr-6">–</span>
       <vue-slider
         @change="handleChange"
@@ -21,6 +33,11 @@
       />
       <span class="text-4xl ml-6">+</span>
     </div>
+
+    <div class="px-gutter w-full" :class="{'hidden':!showImg}">
+      <img class="w-full border-white border-8" src="" ref="img">
+    </div>
+
   </section>
 </template>
 
@@ -33,7 +50,8 @@ export default {
     setTimeout(this.init, 250);
   },
   data: () => ({
-    isVisible: false,
+    showCanvas: false,
+    showImg: false
   }),
   methods: {
     toolTipFormatter(v) {
@@ -87,7 +105,7 @@ export default {
         this.image.top = this.clamp(this.image.top, minY, 0);
       });
 
-      this.isVisible = true;
+      this.showCanvas = true;
     },
     scale(e, v, c = false) {
       let width = e.getScaledWidth();
@@ -147,25 +165,42 @@ export default {
         })
       );
     },
-    download() {
+    makeImg(){
       let width = 1500;
       let height = width * (this.$refs.canvas.height / this.$refs.canvas.width);
       let imgCanvas = document.createElement("canvas");
       imgCanvas.width = width;
       imgCanvas.height = height;
       imgCanvas.getContext("2d").drawImage(this.$refs.canvas, 0, 0, this.$refs.canvas.width, this.$refs.canvas.height, 0, 0, width, height);
+      return imgCanvas
+    },
+    destroyPhoto(){
+      this.showImg = false
+      this.$refs.img.src = null
+    },
+    createImg(){
+      let img = this.makeImg()
+      this.$refs.img.src = img.toDataURL('image/jpeg');
+      this.showImg = true
+    },
+    download() {
+
+      let img = this.makeImg()
 
       if (window.navigator.msSaveBlob) {
-        window.navigator.msSaveBlob(imgCanvas.msToBlob(), "photo-frame.png");
+        window.navigator.msSaveBlob(img.msToBlob(), "photo-frame.png");
       } else {
         const a = document.createElement("a");
         document.body.appendChild(a);
-        a.href = imgCanvas.toDataURL();
-        a.download = "photo-frame.png";
+        a.href = img.toDataURL('image/jpeg');
+        a.download = "photo-frame.jpg";
         a.click();
         document.body.removeChild(a);
       }
     },
+    isMobile(){
+      return window.isMobile
+    }
   },
 };
 </script>
@@ -178,7 +213,7 @@ export default {
     transition: opacity .5s;
   }
 
-  #canvas.is-visible{
+  .is-visible #canvas{
     opacity: 1;
   }
 
@@ -201,5 +236,9 @@ export default {
     background: white;
     box-shadow: 0px 2px 4px rgba(theme('colors.purplergb'),.5);
     border-radius: 100%;
+  }
+
+  #editor img{
+    box-shadow: 0px 5px 5px rgba(theme('colors.purplergb'),.5);
   }
 </style>
